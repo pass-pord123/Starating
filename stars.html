@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stars</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <style>
+       * {
+            margin-left: 10px;
+            padding: 0;
+        }
+        .stars {
+            display: inline-block;
+        }
+
+        .star {
+            color: gainsboro;
+            
+            cursor: pointer;
+            float: right;
+        }
+
+        .star:hover,
+        .star:hover~.star,
+        .checked {
+            color: red;
+        }
+       
+                
+            
+    </style>
+            
+                
+      
+</head>
+
+<body>
+    <template id="starrating">
+        <div>Rating: {{modelValue}}</div>
+        <span class="stars">
+             <span :title="6-i"
+             v-for="i in 5" :key="i" class="star" :class="{checked: ischecked(i) }" 
+              @click="clickstar(i)">★</span>
+             
+        </span>
+    </template>
+    
+    <script>
+        const Starrating = {
+            props:['modelValue',"texts"],
+            data(){
+                return{
+       
+                }
+            },
+            methods:{
+                clickstar(i){
+                    this.$emit("update:modelValue",6-i)
+                    
+                },
+                ischecked(i){
+                    return this.modelValue>= 6-i? true:false},
+            },
+            template:"#starrating"
+        };
+        
+    </script>
+
+    <template id="product">
+        <h3>{{pro.title}}</h3>
+        <Starrating v-model="pro.rating"></Starrating>
+        <br>
+        <textarea name="text" id="text" cols="60" rows="5">{{pro.text}}</textarea>
+        <hr>
+    </template>
+    <script>
+        const Product={
+            template:"#product",
+            props:['pro'],
+            components:{
+                Starrating
+            },  
+        }
+        
+    </script>
+    <div id="app">
+        <Product v-for="(pro, index) in products" :key="index" :pro="pro"></Product>
+        
+    </div>
+    <script>
+        const app = Vue.createApp({
+          
+            components: {
+                Product
+            },
+            data(){
+                return{
+                    products:[
+                        {
+                        title:"iPhone 13",
+                        rating:3,  
+                        text:"It's great!", 
+                        },
+                        {
+                        title:"iPhone 15",
+                        rating:4, 
+                        text:"This product is wonderful! I like it so much.",
+                        }
+                    ]
+                }
+            }
+        });
+        app.mount("#app")
+    </script>
+</body>
+
+</html>

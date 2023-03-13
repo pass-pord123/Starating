@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin-left: 10px;
+            padding: 0;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .star {
+            font-size: 30px;
+            color: gold;
+        }
+    </style>
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1589663_oz3ncj01m1.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- <Star :count='5' color='red' :score='2'></Star> -->
+        <Product v-for="product in products" :pro="product"></Product>
+    </div>
+
+    <template id="star">
+        <div>
+            <i class="star iconfont" :style="{color:color}"
+            :class="item<=mytempscore?'iconstar1':'iconstar'" 
+            v-for="item in count" 
+            @mouseenter="mytempscore=item" 
+            @mouseleave="mytempscore=myscore"
+            @click="myscore=item"></i>
+            {{mytempscore}}分    
+        </div>
+       </template>
+
+       <script>
+        const Star= {
+            props: {
+                count: {
+                    type: Number,
+                    default: 5
+                },
+                score: {
+                    type: Number,
+                    default: ''
+                },
+                color: {
+                    type: String,
+                    default: 'gold'
+                }
+    
+            },
+            data() {
+                return {
+                    myscore: this.score,
+                    mytempscore: this.score
+    
+                }
+            },
+            template: "#star"    
+        }  
+    </script>
+
+    <template id="product">
+        <h3>{{pro.title}}</h3>
+        <Star :count='5' color='red' :score="pro.score"></Star>
+        
+        <textarea name="text" id="text" cols="60" rows="5">{{pro.text}}</textarea>
+    </template>
+
+    <script>
+        const Product={
+            template:"#product",
+            props:['pro'],
+            components:{
+                Star
+            },  
+        }
+        
+    </script>
+
+
+<script>
+    new Vue({
+        el: "#app",
+        components: {
+               Product
+            },
+            data(){
+                return{
+                    products:[
+                        {
+                        title:"iPhone 13",
+                        score:"3",
+                        text:"It's great!", 
+                        },
+                        {
+                        title:"iPad",
+                        score:"5",
+                        text:"This product is wonderful! I like it so much.",
+                        }
+                    ]
+                }
+            }
+    })
+       
+</script>
+</body>
+
+</html>
+

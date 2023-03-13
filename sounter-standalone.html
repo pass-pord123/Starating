@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter Standalone</title>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+    <template id="counter">
+        <button @click="decrement">-</button>        
+        {{modelValue}}
+        <button @click="increment">+</button>
+    </template>
+    <script>
+        const Counter ={
+            props:['modelValue','min','max'],
+            methods: {
+                increment() {
+                    if (this.modelValue < this.max) {
+                        this.$emit("update:modelValue",this.modelValue+1)
+                    }
+                },
+                decrement() {
+                    if (this.modelValue > this.min) {
+                        this.$emit("update:modelValue",this.modelValue-1)
+                    }
+                }
+            },
+            template:"#counter"
+        }
+       
+    </script>
+
+    <template id="product">
+        <h3>{{pro.title}}</h3>
+        <span>{{pro.price}}</span>
+        <Counter v-model="pro.amount" min="0" max="10"></Counter>
+    </template>
+    <script>
+        const Product={
+            template:"#product",
+            props:['pro'],
+            components:{
+                Counter
+            },  
+        }
+        
+    </script>
+    <div id="app">
+    <Product v-for="product in products" :pro="product"></Product>
+    
+    </div>
+    <script>
+        const app = Vue.createApp({
+          
+            components: {
+                Product
+            },
+            data(){
+                return{
+                    products:[
+                        {
+                        title:"iPhone 13",
+                        price:"1500",
+                        amount:3,   
+                        },
+                        {
+                        title:"iPhone 15",
+                        price:"2500",
+                        amount:3, 
+                        }
+                    ]
+                }
+            }
+        });
+        app.mount("#app")
+    </script>
+</body>
+</html>
